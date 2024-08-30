@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {MessageCircle} from "lucide-react";
 import {ScrollArea} from "@/components/ui/scroll-area";
@@ -14,6 +14,14 @@ const Messages = ({messages, handleEvaluation}: {
     messages: Message[],
     handleEvaluation: (messageId: number, evaluation: string[]) => void
 }) => {
+    const lastMessageRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        lastMessageRef.current?.scrollIntoView({behavior: "smooth"});
+    };
+
+    useEffect(scrollToBottom, [messages]);
+
     return (
         <ScrollArea className="flex-grow p-4">
             {messages.map(message => (
@@ -35,6 +43,7 @@ const Messages = ({messages, handleEvaluation}: {
                     </div>
                 </div>
             ))}
+            <div ref={lastMessageRef}/>
         </ScrollArea>
     )
 }
