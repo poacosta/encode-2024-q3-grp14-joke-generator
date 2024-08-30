@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {MessageCircle} from "lucide-react";
-import {ScrollArea} from "@/components/ui/scroll-area";
 import {Reactions} from "@/components/reactions";
 
 export type Message = {
@@ -16,14 +15,12 @@ const Messages = ({messages, handleEvaluation}: {
 }) => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
 
-    const scrollToBottom = () => {
+    useEffect(() => {
         lastMessageRef.current?.scrollIntoView({behavior: "smooth"});
-    };
-
-    useEffect(scrollToBottom, [messages]);
+    }, [messages]);
 
     return (
-        <ScrollArea className="flex-grow p-4">
+        <div className="p-4">
             {messages.map(message => (
                 <div key={message.id} className="mb-4">
                     <div className="flex justify-start">
@@ -44,7 +41,7 @@ const Messages = ({messages, handleEvaluation}: {
                 </div>
             ))}
             <div ref={lastMessageRef}/>
-        </ScrollArea>
+        </div>
     )
 }
 

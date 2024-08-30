@@ -1,5 +1,5 @@
 "use client"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Header} from "@/components/header"
 import {Filters} from "@/components/filters"
 import {Message, Messages} from "@/components/messages"
@@ -40,6 +40,7 @@ export default function Chat() {
     const [tone, setTone] = useState("witty")
     const [jokeType, setJokeType] = useState("pun")
     const [temperature, setTemperature] = useState([0.5])
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const handleClick = async () => {
         setIsLoading(true)
@@ -63,22 +64,35 @@ export default function Chat() {
         )
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <div className="flex flex-col h-screen w-full">
-            <Header/>
-            <Filters
-                topic={topic}
-                setTopic={setTopic}
-                tone={tone}
-                setTone={setTone}
-                jokeType={jokeType}
-                setJokeType={setJokeType}
-                temperature={temperature}
-                setTemperature={setTemperature}
-                isLoading={isLoading}
-                handleClick={handleClick}
-            />
-            <Messages messages={messages} handleEvaluation={handleEvaluation}/>
+            <div className={`sticky top-0 z-10 bg-background transition-shadow ${isScrolled ? 'shadow-md' : ''}`}>
+                <Header/>
+                <Filters
+                    topic={topic}
+                    setTopic={setTopic}
+                    tone={tone}
+                    setTone={setTone}
+                    jokeType={jokeType}
+                    setJokeType={setJokeType}
+                    temperature={temperature}
+                    setTemperature={setTemperature}
+                    isLoading={isLoading}
+                    handleClick={handleClick}
+                />
+            </div>
+            <div className="flex-grow overflow-y-auto">
+                <Messages messages={messages} handleEvaluation={handleEvaluation}/>
+            </div>
         </div>
     );
 }
