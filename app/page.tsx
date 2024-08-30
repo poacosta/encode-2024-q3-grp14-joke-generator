@@ -39,7 +39,7 @@ export default function Chat() {
     const [topic, setTopic] = useState("work")
     const [tone, setTone] = useState("witty")
     const [jokeType, setJokeType] = useState("pun")
-    const [temperature, setTemperature] = useState([0.5])
+    const [temperature, setTemperature] = useState([1])
     const [isScrolled, setIsScrolled] = useState(false);
 
     const handleClick = async () => {
