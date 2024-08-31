@@ -41,7 +41,7 @@ const Messages = ({messages, handleJokeEvaluationClick, isLoading, jokeCategory}
                     <div className="mt-2 ml-8 flex justify-left">
                         <Button className='mt-2 ml-2' type="button" disabled={isLoading}
                                 onClick={() => handleJokeEvaluationClick(message.text)}>
-                            {isLoading ? "Evaluating..." : `This joke is: ${jokeCategory}` || "Evaluate the Joke"}
+                            {isLoading ? "Evaluating..." : `${jokeCategory}` || "Evaluate the Joke"}
                         </Button>
                     </div>
                 </div>

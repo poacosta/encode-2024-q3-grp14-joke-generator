@@ -89,7 +89,7 @@ export default function Chat() {
 
         try {
             const response = await evaluateJoke(message, temperature[0]);
-            setJokeCategory(response);
+            setJokeCategory(`This joke is: ${response}`);
         } catch (error) {
             console.error("Failed to evaluate joke:", error);
         } finally {
