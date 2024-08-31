@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {MessageCircle} from "lucide-react";
 import {Reactions} from "@/components/reactions";
+import {Button} from "@/components/ui/button";
 
 export type Message = {
     id: number
@@ -9,9 +10,12 @@ export type Message = {
     evaluation?: string[]
 }
 
-const Messages = ({messages, handleEvaluation}: {
+const Messages = ({messages, handleEvaluation, handleJokeEvaluationClick, isLoading, jokeCategory}: {
     messages: Message[],
-    handleEvaluation: (messageId: number, evaluation: string[]) => void
+    handleEvaluation: (messageId: number, evaluation: string[]) => void,
+    handleJokeEvaluationClick: (message: string) => void,
+    isLoading: boolean,
+    jokeCategory: string
 }) => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
 
@@ -35,9 +39,15 @@ const Messages = ({messages, handleEvaluation}: {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-2 flex justify-center">
-                        <Reactions handleEvaluation={handleEvaluation} message={message}/>
+                    <div className="mt-2 ml-8 flex justify-left">
+                            <Button className='mt-2 ml-2' type="submit" disabled={isLoading} onClick={()=>handleJokeEvaluationClick(message.text)}>
+                                {isLoading ? "Evauating..." : "Evaluate the Joke"}
+                            </Button>
+                            <p className="inline-flex items-center h-10 px-3 my-3">The Joke is: {jokeCategory}</p>
                     </div>
+                    {/* <div className="mt-2 flex justify-center">
+                        <Reactions handleEvaluation={handleEvaluation} message={message}/>
+                    </div> */}
                 </div>
             ))}
             <div ref={lastMessageRef}/>
