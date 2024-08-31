@@ -14,7 +14,7 @@ npm install
 Then, install and init `shadcn/ui` CLI:
 
 ```bash
-npx shadcn-ui@latest init
+npx shadcn init
 ```
 
 Next create a `.env` file in the root directory of the project and add the following environment variables:
@@ -39,5 +39,5 @@ This project uses `shadcn/ui`, which is why you may need to add built-in compone
 Use the following command to add a built-in component:
 
 ```bash
-npx shadcn-ui@latest add <component-name>
+npx shadcn add <component-name>
 ```
