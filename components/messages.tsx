@@ -8,14 +8,14 @@ export type Message = {
     id: number
     text: string
     evaluation?: string[]
+    jokeCategory?: string
 }
 
-const Messages = ({messages, handleJokeEvaluationClick, isLoading, jokeCategory}: {
+const Messages = ({messages, handleJokeEvaluationClick, isLoading}: {
     messages: Message[],
     handleEvaluation: (messageId: number, evaluation: string[]) => void,
-    handleJokeEvaluationClick: (message: string) => void,
-    isLoading: boolean,
-    jokeCategory: string
+    handleJokeEvaluationClick: (messageId: number, message: string) => void,
+    isLoading: boolean
 }) => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
 
@@ -40,13 +40,13 @@ const Messages = ({messages, handleJokeEvaluationClick, isLoading, jokeCategory}
                         </div>
                     </div>
                     <div className="mt-2 ml-8 flex justify-left">
-                        {jokeCategory ? (
+                        {message.jokeCategory ? (
                             <Badge className="bg-black text-white hover:bg-gray-800">
-                                {jokeCategory}
+                                {message.jokeCategory}
                             </Badge>
                         ) : (
                             <Button className='mt-2 ml-2' type="button" disabled={isLoading} variant="outline"
-                                    onClick={() => handleJokeEvaluationClick(message.text)}>
+                                    onClick={() => handleJokeEvaluationClick(message.id, message.text)}>
                                 <Sparkles className="h-4 w-4 mr-2"/> {isLoading ? "Evaluating..." : "Evaluate"}
                             </Button>
                         )}

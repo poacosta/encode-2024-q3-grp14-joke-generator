@@ -68,7 +68,6 @@ export default function Chat() {
     const [jokeType, setJokeType] = useState("pun")
     const [temperature, setTemperature] = useState([1])
     const [isScrolled, setIsScrolled] = useState(false);
-    const [jokeCategory, setJokeCategory] = useState("")
 
     const handleClick = async () => {
         setIsLoading(true)
@@ -84,12 +83,16 @@ export default function Chat() {
         }
     }
 
-    const handleJokeEvaluationClick = async (message: string): Promise<void> => {
+    const handleJokeEvaluationClick = async (messageId: number, message: string): Promise<void> => {
         setIsLoading(true);
 
         try {
             const response = await evaluateJoke(message, temperature[0]);
-            setJokeCategory(response);
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg.id === messageId ? {...msg, jokeCategory: response} : msg
+                )
+            );
         } catch (error) {
             console.error("Failed to evaluate joke:", error);
         } finally {
@@ -132,8 +135,10 @@ export default function Chat() {
                 />
             </div>
             <div className="flex-grow overflow-y-auto">
-                <Messages messages={messages} handleEvaluation={handleEvaluation} isLoading={isLoading}
-                          handleJokeEvaluationClick={handleJokeEvaluationClick} jokeCategory={jokeCategory}/>
+                <Messages messages={messages}
+                          handleEvaluation={handleEvaluation}
+                          isLoading={isLoading}
+                          handleJokeEvaluationClick={(messageId: number, message: string) => handleJokeEvaluationClick(messageId, message)}/>
             </div>
         </div>
     );
