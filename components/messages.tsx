@@ -1,7 +1,8 @@
 import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
-import {MessageCircle} from "lucide-react";
+import {MessageCircle, Sparkles} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {Badge} from "@/components/ui/badge";
 
 export type Message = {
     id: number
@@ -39,10 +40,16 @@ const Messages = ({messages, handleJokeEvaluationClick, isLoading, jokeCategory}
                         </div>
                     </div>
                     <div className="mt-2 ml-8 flex justify-left">
-                        <Button className='mt-2 ml-2' type="button" disabled={isLoading}
-                                onClick={() => handleJokeEvaluationClick(message.text)}>
-                            {isLoading ? "Evaluating..." : `${jokeCategory}` || "Evaluate the Joke"}
-                        </Button>
+                        {jokeCategory ? (
+                            <Badge className="bg-black text-white hover:bg-gray-800">
+                                {jokeCategory}
+                            </Badge>
+                        ) : (
+                            <Button className='mt-2 ml-2' type="button" disabled={isLoading} variant="outline"
+                                    onClick={() => handleJokeEvaluationClick(message.text)}>
+                                <Sparkles className="h-4 w-4 mr-2"/> {isLoading ? "Evaluating..." : "Evaluate"}
+                            </Button>
+                        )}
                     </div>
                 </div>
             ))}
