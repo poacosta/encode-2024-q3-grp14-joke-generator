@@ -3,6 +3,12 @@
 This is a simple application that allows users to generate jokes, which can be customized according to various
 criteria such as topic, tone, type, and temperature.
 
+## Contributors
+* @Pedro Acosta `odoenl`
+* @MrBro `AL8lY2`
+* @kate_f_ `a1oYsY`
+* @ermarsot `a8ZQGn`
+
 ## Getting Started
 
 First, install the dependencies:
