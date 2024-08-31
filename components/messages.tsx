@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {MessageCircle} from "lucide-react";
-import {Reactions} from "@/components/reactions";
 import {Button} from "@/components/ui/button";
 
 export type Message = {
@@ -10,7 +9,7 @@ export type Message = {
     evaluation?: string[]
 }
 
-const Messages = ({messages, handleEvaluation, handleJokeEvaluationClick, isLoading, jokeCategory}: {
+const Messages = ({messages, handleJokeEvaluationClick, isLoading, jokeCategory}: {
     messages: Message[],
     handleEvaluation: (messageId: number, evaluation: string[]) => void,
     handleJokeEvaluationClick: (message: string) => void,
@@ -40,14 +39,11 @@ const Messages = ({messages, handleEvaluation, handleJokeEvaluationClick, isLoad
                         </div>
                     </div>
                     <div className="mt-2 ml-8 flex justify-left">
-                            <Button className='mt-2 ml-2' type="submit" disabled={isLoading} onClick={()=>handleJokeEvaluationClick(message.text)}>
-                                {isLoading ? "Evauating..." : "Evaluate the Joke"}
-                            </Button>
-                            <p className="inline-flex items-center h-10 px-3 my-3">The Joke is: {jokeCategory}</p>
+                        <Button className='mt-2 ml-2' type="button" disabled={isLoading}
+                                onClick={() => handleJokeEvaluationClick(message.text)}>
+                            {isLoading ? "Evaluating..." : `This joke is: ${jokeCategory}` || "Evaluate the Joke"}
+                        </Button>
                     </div>
-                    {/* <div className="mt-2 flex justify-center">
-                        <Reactions handleEvaluation={handleEvaluation} message={message}/>
-                    </div> */}
                 </div>
             ))}
             <div ref={lastMessageRef}/>
