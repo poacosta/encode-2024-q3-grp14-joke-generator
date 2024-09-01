@@ -1,21 +1,21 @@
 import React, {useEffect, useRef} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
-import {MessageCircle} from "lucide-react";
-import {Reactions} from "@/components/reactions";
+import {MessageCircle, Sparkles} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {Badge} from "@/components/ui/badge";
 
 export type Message = {
     id: number
     text: string
     evaluation?: string[]
+    jokeCategory?: string
 }
 
-const Messages = ({messages, handleEvaluation, handleJokeEvaluationClick, isLoading, jokeCategory}: {
+const Messages = ({messages, handleJokeEvaluationClick, isLoading}: {
     messages: Message[],
     handleEvaluation: (messageId: number, evaluation: string[]) => void,
-    handleJokeEvaluationClick: (message: string) => void,
-    isLoading: boolean,
-    jokeCategory: string
+    handleJokeEvaluationClick: (messageId: number, message: string) => void,
+    isLoading: boolean
 }) => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
 
@@ -40,14 +40,17 @@ const Messages = ({messages, handleEvaluation, handleJokeEvaluationClick, isLoad
                         </div>
                     </div>
                     <div className="mt-2 ml-8 flex justify-left">
-                            <Button className='mt-2 ml-2' type="submit" disabled={isLoading} onClick={()=>handleJokeEvaluationClick(message.text)}>
-                                {isLoading ? "Evauating..." : "Evaluate the Joke"}
+                        {message.jokeCategory ? (
+                            <Badge className="bg-black text-white hover:bg-gray-800">
+                                {message.jokeCategory}
+                            </Badge>
+                        ) : (
+                            <Button className='mt-2 ml-2' type="button" disabled={isLoading} variant="outline"
+                                    onClick={() => handleJokeEvaluationClick(message.id, message.text)}>
+                                <Sparkles className="h-4 w-4 mr-2"/> {isLoading ? "Evaluating..." : "Evaluate"}
                             </Button>
-                            <p className="inline-flex items-center h-10 px-3 my-3">The Joke is: {jokeCategory}</p>
+                        )}
                     </div>
-                    {/* <div className="mt-2 flex justify-center">
-                        <Reactions handleEvaluation={handleEvaluation} message={message}/>
-                    </div> */}
                 </div>
             ))}
             <div ref={lastMessageRef}/>

@@ -32,7 +32,7 @@ const generateJoke = async (topic: string, tone: string, type: string, temperatu
     return data.content
 }
 
-// Function to evaluate if joke is funny, appropraite a joke using the OpenAI API
+// Function to evaluate if joke is funny, appropriate a joke using the OpenAI API
 const evaluateJoke = async (joke: string, temperature: number): Promise<string> => {
     const response = await fetch("/api/chat", {
         method: "POST",
@@ -43,7 +43,7 @@ const evaluateJoke = async (joke: string, temperature: number): Promise<string> 
             messages: [
                 {
                     role: "system",
-                    content: `You evalute the joke given and return a one word answer. The joke can be evaluated as funny, appropriate, offensive, clever or confusing.
+                    content: `You evaluate the joke given and return a one word answer. The joke can be evaluated as funny, appropriate, offensive, clever or confusing.
                                Return "Unknown", if you can't evaluate the joke`
                 },
                 {
@@ -68,7 +68,6 @@ export default function Chat() {
     const [jokeType, setJokeType] = useState("pun")
     const [temperature, setTemperature] = useState([1])
     const [isScrolled, setIsScrolled] = useState(false);
-    const [jokeCategory, setJokeCategory] = useState("")
 
     const handleClick = async () => {
         setIsLoading(true)
@@ -84,21 +83,22 @@ export default function Chat() {
         }
     }
 
-    const handleJokeEvaluationClick = async (message: string) => {
-        setIsLoading(true)
+    const handleJokeEvaluationClick = async (messageId: number, message: string): Promise<void> => {
+        setIsLoading(true);
 
         try {
-            let lastMessage = message
-            const response = await evaluateJoke(lastMessage, temperature[0])
-            console.log(response)
-            alert(response)
-            setJokeCategory(response)
+            const response = await evaluateJoke(message, temperature[0]);
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg.id === messageId ? {...msg, jokeCategory: response} : msg
+                )
+            );
         } catch (error) {
-            console.error("Failed to evaluate joke:", error)
+            console.error("Failed to evaluate joke:", error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     const handleEvaluation = (messageId: number, evaluation: string[]) => {
         setMessages(prev =>
@@ -135,8 +135,10 @@ export default function Chat() {
                 />
             </div>
             <div className="flex-grow overflow-y-auto">
-                <Messages messages={messages} handleEvaluation={handleEvaluation} isLoading={isLoading}
-                    handleJokeEvaluationClick={handleJokeEvaluationClick} jokeCategory={jokeCategory}/>
+                <Messages messages={messages}
+                          handleEvaluation={handleEvaluation}
+                          isLoading={isLoading}
+                          handleJokeEvaluationClick={(messageId: number, message: string) => handleJokeEvaluationClick(messageId, message)}/>
             </div>
         </div>
     );
