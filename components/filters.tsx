@@ -1,4 +1,4 @@
-import React from 'react';
+import {useTransition} from 'react';
 import {Label} from "@/components/ui/label";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Slider} from "@/components/ui/slider";
@@ -59,7 +59,6 @@ const Filters = ({
                      setJokeType,
                      temperature,
                      setTemperature,
-                     isLoading,
                      handleClick
                  }: {
     topic: string,
@@ -70,9 +69,9 @@ const Filters = ({
     setJokeType: (value: string) => void,
     temperature: number[],
     setTemperature: (value: number[]) => void,
-    isLoading: boolean,
-    handleClick: (e: React.FormEvent) => void,
-}) => {
+    handleClick: (e?: React.FormEvent) => void,
+  }) => {
+    const [isPending, startTransition] = useTransition()
     return (
         <div className="bg-secondary p-4 flex flex-wrap gap-4 items-center justify-center">
             <SelectField
@@ -101,7 +100,7 @@ const Filters = ({
                 <Slider
                     id="temperature"
                     min={0}
-                    max={2}
+                    max={1}
                     step={0.1}
                     value={temperature}
                     onValueChange={setTemperature}
@@ -109,8 +108,16 @@ const Filters = ({
                 />
                 <span className="text-sm text-muted-foreground w-12">{temperature[0].toFixed(1)}</span>
             </div>
-            <Button type="submit" disabled={isLoading} onClick={handleClick}>
-                {isLoading ? "Generating..." : "Generate"}
+            <Button
+                type="submit"
+                disabled={isPending}
+                onClick={() => {
+                    startTransition(() => {
+                        handleClick()
+                    })
+                }}
+            >
+                {isPending ? "Generating..." : "Generate"}
             </Button>
         </div>
     )

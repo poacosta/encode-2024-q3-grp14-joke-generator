@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import {useEffect, useRef, useTransition} from 'react'
 import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {MessageCircle, Sparkles} from "lucide-react";
 import {Button} from "@/components/ui/button";
@@ -11,13 +11,12 @@ export type Message = {
     jokeCategory?: string
 }
 
-const Messages = ({messages, handleJokeEvaluationClick, isLoading}: {
+const Messages = ({messages, handleJokeEvaluationClick}: {
     messages: Message[],
-    handleEvaluation: (messageId: number, evaluation: string[]) => void,
     handleJokeEvaluationClick: (messageId: number, message: string) => void,
-    isLoading: boolean
 }) => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
+    const [isPending, startTransition] = useTransition()
 
     useEffect(() => {
         lastMessageRef.current?.scrollIntoView({behavior: "smooth"});
@@ -45,9 +44,18 @@ const Messages = ({messages, handleJokeEvaluationClick, isLoading}: {
                                 {message.jokeCategory}
                             </Badge>
                         ) : (
-                            <Button className='mt-2 ml-2' type="button" disabled={isLoading} variant="outline"
-                                    onClick={() => handleJokeEvaluationClick(message.id, message.text)}>
-                                <Sparkles className="h-4 w-4 mr-2"/> {isLoading ? "Evaluating..." : "Evaluate"}
+                            <Button
+                                className="mt-2 ml-2"
+                                type="button"
+                                disabled={isPending}
+                                variant="outline"
+                                onClick={() => {
+                                    startTransition(() => {
+                                        handleJokeEvaluationClick(message.id, message.text)
+                                    })
+                                }}
+                            >
+                                <Sparkles className="h-4 w-4 mr-2" /> {isPending ? "Evaluating..." : "Evaluate"}
                             </Button>
                         )}
                     </div>
