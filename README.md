@@ -1,7 +1,14 @@
 # Joke Generator
 
-This is a simple application that allows users to generate jokes, which can be customized according to various
-criteria such as topic, tone, type, and temperature.
+This is a simple application that allows users to generate jokes, which can be customized according to various criteria such as topic, tone, type, and temperature. Once a joke is generated, you can evaluate it using AI.
+
+![imagen](https://github.com/user-attachments/assets/814cfe72-c906-46a0-89b7-3aa6dcb4fc62)
+
+## Contributors
+* @Pedro Acosta `odoenl`
+* @MrBro `AL8lY2`
+* @kate_f_ `a1oYsY`
+* @ermarsot `a8ZQGn`
 
 ## Getting Started
 
